@@ -67,7 +67,7 @@ export default function SearchCardSection({ onSearch, setIsRoundTrip }) {
           Ready for your trip? Click{" "}
           <a
             className="underline underline-offset-2 hover:text-color5"
-            href="https://your-travel-checklist.vercel.app/"
+            href="https://travel-check-list2.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
           >
