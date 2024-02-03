@@ -29,7 +29,7 @@ export default function SearchCardSection({ onSearch, setIsRoundTrip }) {
   };
 
   return (
-    <div className="p-10 flex flex-col gap-8 lg:pl-28 lg:pr-28 pt-10 pb-10 rounded-2xl bg-[#457B9D] bg-opacity-30 backdrop-blur-2xl backdrop-filter shadow-xl">
+    <div className="p-10 flex flex-col gap-8 lg:pl-20 lg:pr-20 pt-10 pb-10 rounded-2xl bg-[#457B9D] bg-opacity-30 backdrop-blur-2xl backdrop-filter shadow-xl">
       <div className="flex flex-col gap-2">
         <h2 className="text-sm text-color1">Discover Flights Worldwide!</h2>
         <p className="text-xs text-color4">
