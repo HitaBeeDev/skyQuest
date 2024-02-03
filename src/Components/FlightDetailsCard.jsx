@@ -1,6 +1,7 @@
 import turkish3 from "../assets/turkish3.png";
 import searchArrow from "../assets/searchArrow.png";
 import flightDatas from "./flightDatas";
+import FlightInfo from "./FlightInfo";
 
 export default function FlightDetailsCard({
   departure,
@@ -10,87 +11,43 @@ export default function FlightDetailsCard({
   adultsCount,
   childrenCount,
 }) {
-  const airportCode = departure.toLowerCase().split("-")[1].trim();
-
+  const airportCode = departure.split("-")[1]?.trim().toLowerCase();
   const findSelectedFlight = flightDatas.find(
-    (obj) => obj.departureAirport.toLowerCase() === airportCode
+    (flight) => flight.departureAirport.toLowerCase() === airportCode
   );
 
   if (!findSelectedFlight) {
     return <p>No flight data found for the selected criteria.</p>;
   }
 
-  const childrenMultiplier = 0.5;
-  const adultsPrice = findSelectedFlight.price * adultsCount;
-  const childrenPrice =
-    findSelectedFlight.price * childrenCount * childrenMultiplier;
+  const calculatePrice = () => {
+    const { price } = findSelectedFlight;
+    const adultPrice = price * adultsCount;
+    const childPrice = price * childrenCount * 0.5;
+    const multiplier = cabinClass === "Business" ? 2.5 : 1;
+    return (adultPrice + childPrice) * multiplier;
+  };
 
-  const basePrice =
-    cabinClass === "Business"
-      ? adultsPrice * 2.5 + childrenPrice * 2.5
-      : adultsPrice + childrenPrice;
+  const basePrice = calculatePrice();
 
   return (
     <div className="mb-5 flex flex-row bg-color4 rounded-xl lg:p-3 p-2">
       <div className="w-10/12 flex flex-col gap-10">
-        <div className="flex flex-row justify-center lg:gap-8 gap-3 items-center">
-          <img src={turkish3} className="lg:w-10 lg:h-3 w-8 h-3" />
-          <div>
-            <p className="lg:text-xs text-[9px] text-color1 font-semibold">
-              {departure}
-            </p>
-            <p className="lg:text-xs text-[9px] text-color1 font-semibold text-right">
-              {findSelectedFlight.departureTime}
-            </p>
-          </div>
-          <div className="flex flex-col justify-center gap-1 w-2/12 text-center">
-            <p className="lg:text-xs text-[9px] text-color1">
-              {findSelectedFlight.flightDuration}
-            </p>
-            <div className="border-t-2 border-color5"></div>
-            <p className="lg:text-xs text-[9px] text-color1">
-              {findSelectedFlight.stops}
-            </p>
-          </div>
-          <div>
-            <p className="lg:text-xs text-[9px] text-color1 font-semibold">
-              {arrival}
-            </p>
-            <p className="lg:text-xs text-[9px] text-color1 font-semibold text-right">
-              {findSelectedFlight.arrivalTime}
-            </p>
-          </div>
-        </div>
-        {/* If round trip, display return information */}
+        <FlightInfo
+          imageSrc={turkish3}
+          departure={departure}
+          arrival={arrival}
+          flightDetails={findSelectedFlight}
+          isReturn={false}
+        />
         {isRoundTrip && (
-          <div className="flex flex-row justify-center lg:gap-8 gap-3 items-center">
-            <img src={turkish3} className="w-10 h-3" />
-            <div>
-              <p className="lg:text-xs text-[9px] text-color1 font-semibold">
-                {arrival}
-              </p>
-              <p className="lg:text-xs text-[9px] text-color1 font-semibold text-right">
-                {findSelectedFlight.returnDepartureTime}
-              </p>
-            </div>
-            <div className="flex flex-col justify-center gap-1 w-2/12 text-center">
-              <p className="lg:text-xs text-[9px] text-color1">
-                {findSelectedFlight.returnFlightDuration}
-              </p>
-              <div className="border-t-2 border-color5"></div>
-              <p className="lg:text-xs text-[9px] text-color1">
-                {findSelectedFlight.stops}
-              </p>
-            </div>
-            <div>
-              <p className="lg:text-xs text-[9px] text-color1 font-semibold">
-                {departure}
-              </p>
-              <p className="lg:text-xs text-[9px] text-color1 font-semibold text-right">
-                {findSelectedFlight.returnArrivalTime}
-              </p>
-            </div>
-          </div>
+          <FlightInfo
+            imageSrc={turkish3}
+            departure={arrival}
+            arrival={departure}
+            flightDetails={findSelectedFlight}
+            isReturn={true}
+          />
         )}
       </div>
       <div className="w-3/12 flex flex-col justify-center items-center">

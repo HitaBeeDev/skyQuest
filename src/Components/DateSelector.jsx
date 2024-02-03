@@ -16,7 +16,7 @@ const BlueSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function DateSelector({ isRoundTrip, setIsRoundTrip }) {
+export default function DateSelector({ setIsRoundTrip }) {
   const [departureDate, setDepartureDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [roundTrip, setRoundTrip] = useState(true);
@@ -32,9 +32,9 @@ export default function DateSelector({ isRoundTrip, setIsRoundTrip }) {
   };
 
   const handleRoundTripChange = (event) => {
-    const isRoundTrip = event.target.checked;
-    setRoundTrip(isRoundTrip);
-    setIsRoundTrip(isRoundTrip);
+    const isRound = event.target.checked;
+    setRoundTrip(isRound);
+    setIsRoundTrip(isRound);
   };
 
   return (
@@ -57,9 +57,9 @@ export default function DateSelector({ isRoundTrip, setIsRoundTrip }) {
           type="date"
           id="returnDate"
           className="rounded-md p-1 w-7/12 text-xs text-color2 pl-2"
-          placeholder="From"
+          placeholder="To"
           min={departureDate || today}
-          value={roundTrip ? returnDate : ""}
+          value={returnDate}
           onChange={handleDateChange}
           disabled={!roundTrip}
         />

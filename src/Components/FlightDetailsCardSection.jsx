@@ -31,26 +31,23 @@ export default function FlightDetailsCardSection({
 
   return (
     <div
-      className="overflow-x-hidden overflow-y-hidden p-3 mt-12 lg:mt-0"
+      className="overflow-hidden p-3 mt-12 lg:mt-0"
       style={{ height: "70vh" }}
     >
-      <div className="hidden lg:block">
-        <motion.div
-          style={{ y: dragY }}
-          drag="y"
-          dragElastic={dragElastic}
-          dragConstraints={dragConstraints}
-          transition={transition}
-          onDragEnd={handleDragEnd}
-          className="flex flex-col flex-nowrap"
-        >
+      <motion.div
+        style={{ y: dragY }}
+        drag="y"
+        dragElastic={dragElastic}
+        dragConstraints={dragConstraints}
+        transition={transition}
+        className="flex flex-col gap-4"
+      >
+        {slidesData.map((_, index) => (
           <motion.div
+            key={index}
             className="overflow-hidden"
-            style={{
-              minHeight: `${itemHeight}px`,
-            }}
+            style={{ minHeight: `${itemHeight}px` }}
             whileTap={{ scale: 0.9 }}
-            whileHover={{ transition: "all", duration: 500 }}
           >
             <FlightDetailsCard
               departure={departure}
@@ -60,163 +57,9 @@ export default function FlightDetailsCardSection({
               adultsCount={adultsCount}
               childrenCount={childrenCount}
             />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
-            <FlightDetailsCard
-              departure={departure}
-              arrival={arrival}
-              isRoundTrip={isRoundTrip}
-              cabinClass={cabinClass}
-              adultsCount={adultsCount}
-              childrenCount={childrenCount}
-            />
           </motion.div>
-        </motion.div>
-      </div>
-      <div className="lg:hidden">
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-        <FlightDetailsCard
-          departure={departure}
-          arrival={arrival}
-          isRoundTrip={isRoundTrip}
-          cabinClass={cabinClass}
-          adultsCount={adultsCount}
-          childrenCount={childrenCount}
-        />
-      </div>
+        ))}
+      </motion.div>
     </div>
   );
 }

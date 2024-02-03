@@ -3,50 +3,47 @@ import SearchInput from "./SearchInput";
 import flightDatas from "./flightDatas";
 
 export default function DepartureArrivalInput({ setDeparture, setArrival }) {
-  const [departureInput, setDepartureInput] = useState("");
-  const [arrivalInput, setArrivalInput] = useState("");
-  const [departureSearchResults, setDepartureSearchResults] = useState([]);
-  const [arrivalSearchResults, setArrivalSearchResults] = useState([]);
-  const [departureError, setDepartureError] = useState("");
-  const [arrivalError, setArrivalError] = useState("");
-  const departureInputRef = useRef(null);
-  const arrivalInputRef = useRef(null);
+  const [inputs, setInputs] = useState({ departure: "", arrival: "" });
+  const [searchResults, setSearchResults] = useState({
+    departure: [],
+    arrival: [],
+  });
+  const [errors, setErrors] = useState({ departure: "", arrival: "" });
+  const refs = { departure: useRef(null), arrival: useRef(null) };
 
   useEffect(() => {
-    setDeparture(departureInput);
-    setArrival(arrivalInput);
-  }, [departureInput, arrivalInput]);
+    setDeparture(inputs.departure);
+    setArrival(inputs.arrival);
+  }, [inputs]);
 
-  const handleSearchInput = (event, setInput, setSearchResults) => {
-    const inputValue = event.target.value.toLowerCase();
-    setInput(inputValue);
+  const handleSearchInput = (event, type) => {
+    const value = event.target.value.toLowerCase();
+    setInputs((inputs) => ({ ...inputs, [type]: value }));
 
     const filteredResults = flightDatas.filter((flight) => {
-      const combinedInfo = `${flight.departureCity.toLowerCase()} ${flight.departureAirport.toLowerCase()} ${flight.arrivalCity.toLowerCase()} ${flight.arrivalAirport.toLowerCase()}`;
-      return combinedInfo.includes(inputValue);
+      const info =
+        `${flight.departureCity} ${flight.departureAirport} ${flight.arrivalCity} ${flight.arrivalAirport}`.toLowerCase();
+      return info.includes(value);
     });
 
-    setSearchResults(filteredResults);
+    setSearchResults((results) => ({ ...results, [type]: filteredResults }));
   };
 
-  const handleSelectCity = (searchResult, setInput, isDeparture) => {
-    const displayValue = isDeparture
-      ? `${searchResult.departureCity} - ${searchResult.departureAirport}`
-      : `${searchResult.arrivalCity} - ${searchResult.arrivalAirport}`;
-    setInput(displayValue);
+  const handleSelectCity = (searchResult, type) => {
+    const value =
+      type === "departure"
+        ? `${searchResult.departureCity} - ${searchResult.departureAirport}`
+        : `${searchResult.arrivalCity} - ${searchResult.arrivalAirport}`;
 
-    // Immediately clear search results to close the suggestion list
-    setDepartureSearchResults([]);
-    setArrivalSearchResults([]);
-
-    // Check for flight availability and set error messages accordingly
-    checkFlightAvailability(displayValue, isDeparture);
+    setInputs((inputs) => ({ ...inputs, [type]: value }));
+    setSearchResults({ departure: [], arrival: [] });
+    checkFlightAvailability(value, type);
   };
 
-  const checkFlightAvailability = (displayValue, isDeparture) => {
+  const checkFlightAvailability = (value, type) => {
     const isValid = flightDatas.some((flight) => {
-      const searchValue = displayValue.split(" - ")[0].toLowerCase();
-      return isDeparture
+      const searchValue = value.split(" - ")[0].toLowerCase();
+      return type === "departure"
         ? flight.departureCity.toLowerCase().includes(searchValue) ||
             flight.departureAirport.toLowerCase().includes(searchValue)
         : flight.arrivalCity.toLowerCase().includes(searchValue) ||
@@ -54,69 +51,52 @@ export default function DepartureArrivalInput({ setDeparture, setArrival }) {
     });
 
     if (!isValid) {
-      const errorMessage = `No flights available for ${displayValue}. Please select a different location.`;
-      if (isDeparture) {
-        setDepartureError(errorMessage);
-      } else {
-        setArrivalError(errorMessage);
-      }
+      setErrors((errors) => ({
+        ...errors,
+        [type]: `No flights available for ${value}. Please select a different location.`,
+      }));
     } else {
-      // Clear any existing error messages if the selection is valid
-      if (isDeparture) setDepartureError("");
-      else setArrivalError("");
+      setErrors((errors) => ({ ...errors, [type]: "" }));
     }
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        departureInputRef.current &&
-        !departureInputRef.current.contains(event.target)
-      ) {
-        setDepartureSearchResults([]);
+      if (!refs.departure.current.contains(event.target)) {
+        setSearchResults((results) => ({ ...results, departure: [] }));
       }
-      if (
-        arrivalInputRef.current &&
-        !arrivalInputRef.current.contains(event.target)
-      ) {
-        setArrivalSearchResults([]);
+      if (!refs.arrival.current.contains(event.target)) {
+        setSearchResults((results) => ({ ...results, arrival: [] }));
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div className="text-sm text-color1 font-semibold flex flex-col gap-3 relative">
-      {departureError && <p className="text-red-500">{departureError}</p>}
+      {errors.departure && <p className="text-red-500">{errors.departure}</p>}
       <SearchInput
         label="Depart From"
-        inputRef={departureInputRef}
-        inputValue={departureInput}
-        setSearchResults={setDepartureSearchResults}
-        handleInputChange={(event) =>
-          handleSearchInput(event, setDepartureInput, setDepartureSearchResults)
-        }
+        inputRef={refs.departure}
+        inputValue={inputs.departure}
+        handleInputChange={(event) => handleSearchInput(event, "departure")}
         handleSelectCity={(searchResult) =>
-          handleSelectCity(searchResult, setDepartureInput, true)
+          handleSelectCity(searchResult, "departure")
         }
-        searchResults={departureSearchResults}
+        searchResults={searchResults.departure}
       />
-
-      {arrivalError && <p className="text-red-500">{arrivalError}</p>}
+      {errors.arrival && <p className="text-red-500">{errors.arrival}</p>}
       <SearchInput
         label="Arrive At"
-        inputRef={arrivalInputRef}
-        inputValue={arrivalInput}
-        setSearchResults={setArrivalSearchResults}
-        handleInputChange={(event) =>
-          handleSearchInput(event, setArrivalInput, setArrivalSearchResults)
-        }
+        inputRef={refs.arrival}
+        inputValue={inputs.arrival}
+        handleInputChange={(event) => handleSearchInput(event, "arrival")}
         handleSelectCity={(searchResult) =>
-          handleSelectCity(searchResult, setArrivalInput, false)
+          handleSelectCity(searchResult, "arrival")
         }
-        searchResults={arrivalSearchResults}
+        searchResults={searchResults.arrival}
       />
     </div>
   );

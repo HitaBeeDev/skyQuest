@@ -4,7 +4,7 @@ import slidesData from "./slidesData";
 import arrow from "../assets/arrow.png";
 
 const itemWidth = 220;
-const totalWidth = slidesData.length * (itemWidth * 1.5);
+const totalWidth = slidesData.length * itemWidth * 1.5;
 const dragElastic = 0.5;
 const dragConstraints = {
   left: -totalWidth + window.innerWidth,

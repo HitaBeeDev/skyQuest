@@ -6,7 +6,6 @@ export default function PassengerNumControl({
   label,
   labelSpan,
   ageLabel,
-  type,
   onCountChange,
 }) {
   const [count, setCount] = React.useState(0);
@@ -41,7 +40,7 @@ export default function PassengerNumControl({
           src={minus}
           alt="minus icon"
         />
-        <p className="text-xs text-color1 font-medium">{type}</p>
+        <p className="text-xs text-color1 font-medium"> {label}</p>
         <img
           onClick={handleIncrement}
           className="hover:bg-color3 transition-all cursor-pointer w-4 rounded-sm border-color2 border-[1px] p-[3px]"

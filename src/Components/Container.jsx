@@ -2,17 +2,17 @@ import { useState } from "react";
 import FlightDetailsCardSection from "./FlightDetailsCardSection";
 import SearchCardSection from "./SearchCardSection";
 import WelcomeCardSection from "./WelcomeCardSection";
-import loading from "../assets/loading.gif";
+import loadingGif from "../assets/loading.gif";
 
 const LoadingIcon = () => (
   <div className="w-16 h-16 rounded-full p-4 flex justify-center bg-white">
-    <img src={loading} alt="Loading" />
+    <img src={loadingGif} alt="Loading" />
   </div>
 );
 
 export default function Container() {
   const [showResult, setShowResult] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedDeparture, setSelectedDeparture] = useState("");
   const [selectedArrival, setSelectedArrival] = useState("");
   const [isRoundTrip, setIsRoundTrip] = useState(true);
@@ -25,19 +25,19 @@ export default function Container() {
     arrival,
     roundTrip,
     cabin,
-    adultsCount,
-    childrenCount
+    adults,
+    children
   ) => {
-    setLoading(true);
+    setIsLoading(true);
     setTimeout(() => {
       setSelectedDeparture(departure);
       setSelectedArrival(arrival);
       setIsRoundTrip(roundTrip);
       setCabinClass(cabin);
-      setAdultsCount(adultsCount);
-      setChildrenCount(childrenCount);
+      setAdultsCount(adults);
+      setChildrenCount(children);
       setShowResult(true);
-      setLoading(false);
+      setIsLoading(false);
     }, 2000);
   };
 
@@ -47,8 +47,10 @@ export default function Container() {
         onSearch={handleSearch}
         setIsRoundTrip={setIsRoundTrip}
         setCabinClass={setCabinClass}
+        setAdultsCount={setAdultsCount}
+        setChildrenCount={setChildrenCount}
       />
-      {loading ? (
+      {isLoading ? (
         <LoadingIcon />
       ) : showResult ? (
         <FlightDetailsCardSection
